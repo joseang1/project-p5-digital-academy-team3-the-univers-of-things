@@ -31,14 +31,14 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
-      path: ":/pathMatch(.*)*",
-      name: "not-found",
+      path: "/:pathMatch(.*)*",
+      name: "notFound",
       component: () => import("../views/NotFoundView.vue")
     }
   ],
 })
 
-router.router.beforeEach((to, from) => {
+router.beforeEach((to, from) => {
   
   // const store = useAuthStore();
 
