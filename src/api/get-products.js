@@ -1,6 +1,8 @@
 export default async function getProducts () {
     try {
-        const response = await fetch("https://jsonplaceholder.typicode.com/users");
+        const URI = "https://api.jikan.moe/v4/anime";
+
+        const response = await fetch(URI);
 
         if (!response.ok) {
             throw new Error("Network response was not ok");

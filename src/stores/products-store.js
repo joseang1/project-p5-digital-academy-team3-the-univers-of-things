@@ -5,14 +5,14 @@ import getProducts from '../api/get-products'
 export const useProductsStore = defineStore('products', () => {
   
   // State = data
-  const products = reactive([]);
+  const products = ref([]);
 
   // Getters
   
   
   // Actions
   async function call() {
-    products = await getProducts();
+    products.value = await getProducts();
   }
 
   return { products, call }

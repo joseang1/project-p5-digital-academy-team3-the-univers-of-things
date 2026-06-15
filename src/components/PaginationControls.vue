@@ -2,18 +2,13 @@
 </script>
 
 <template>
-    <div>
-
-        
-
-
-    </div>
+    <h2>(Pagination)</h2>
 
 </template>
 
 
 <style scoped>
-@referense '../assets/main.css';
+@reference '../assets/main.css';
 
 
 

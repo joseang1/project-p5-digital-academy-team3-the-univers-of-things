@@ -1,40 +1,11 @@
 <script setup>
 
-defineProps({
-  id: {
-    type: Number,
-    required: true,
-  }, 
-
-  imgUrl: {
-    type: String,
-    required: true,
-  },
-  title: {
-    type: String,
-    required: true,
-  },    
-  description: {
-    type: String,
-    required: true,
-  },
-  score: {
-    type: Number,
-    required: true,
-  },    
-  category: {
-    type: String,
-    required: true,
-  },  
-  genres: {
-    type: Array,
-    required: true,
-  },    
-  episodes: {
-    type: Number,
-    required: true,
-  }, 
-})
+const props = defineProps([
+    "id", "imgUrl", "title",
+    "description", "score",
+    "category", "genres",
+    "episodes"
+])
 
 </script>
 
@@ -58,7 +29,7 @@ defineProps({
             </div>
 
             <div class="bottom_container">
-                <span>{{ episodes }}</span>
+                <span>Episodes: {{ episodes }}</span>
 
                 <span class="category">{{ category }}</span>
             </div>
@@ -68,42 +39,42 @@ defineProps({
 
 
 <style scoped>
-@referense '../assets/main.css';
+@reference '../assets/main.css';
 
 .container {
     @apply 
-        bg-bg-container rounded-md p-4 
+        bg-bg-container rounded-lg shadow-lg
         border border-border-default
-        flex flex-col gap-0 justify-between
-        
+        grid grid-rows-2 gap-0
         ;
 
 }
 
 .image_container {
     @apply
-        flex flex-col justify-center items-center
-
+        bg-bg-body rounded-lg 
+        flex flex-col justify-center items-center 
+        w-full
         ;
 }
 
 .image {
     @apply
-        w-fill object-contain
+        h-full object-contain
         ;
 }
 
 .content_container {
     @apply 
-        p-2 gap-2 flex flex-col justify-between items-center
-    ;
+        p-4 gap-2 flex flex-col justify-between items-start
+        ;
 }
 
 
 .title {
     @apply 
-        text-left
-    ;
+        text-left w-full
+        ;
 
 }
 
@@ -126,7 +97,7 @@ defineProps({
 }
 .bottom_container {
     @apply 
-        flex flex-row justify-between items-center
+        w-full flex flex-row justify-between items-center
     ;
 }
 
