@@ -12,7 +12,6 @@ const props = defineProps([
 
 <template>
     <div :id="id" class="container">
-        
 
         <div class="image_container">
             <img class="image" :src="imgUrl" :alt="title"/>
