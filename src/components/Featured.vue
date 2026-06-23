@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, computed, reactive } from 'vue';
 import AddToFavoritesBtn from '../components/AddToFavoritesBtn.vue';
+import GoToDetailsBtn from '../components/GoToDetailsBtn.vue';
 import { useFeaturedStore } from '@/stores/featured-store';
 import { storeToRefs } from 'pinia';
 
@@ -43,7 +44,10 @@ onMounted(async () => {
         <p v-if="anime.title_english" class="featured-anime-subtitle">{{ anime.title_english }}</p>
 
         <p class="featured-synopsis">{{ anime.synopsis }}</p>
-        <AddToFavoritesBtn :productId="anime.mal_id" />
+        <div class="button-container">
+          <AddToFavoritesBtn :productId="anime.mal_id" />
+          <GoToDetailsBtn v-if="anime?.mal_id" :animeId="anime.mal_id" />
+        </div>
       </div>
     </div>
   </section>
@@ -137,5 +141,10 @@ onMounted(async () => {
 
 .featured-status {
   @apply text-text-special;
+}
+
+.button-container {
+  @apply
+    flex gap-20
 }
 </style>
