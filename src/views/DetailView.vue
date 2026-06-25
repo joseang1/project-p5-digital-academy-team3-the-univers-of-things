@@ -4,6 +4,8 @@ import { useRoute, useRouter } from 'vue-router';
 import getAnimeById from '../api/product-by-id.js';
 import ProductCard from '../components/ProductCard.vue';
 import getAnimeByGenre from '../api/product-by-genre.js';
+import AddToFavoritesBtn from '../components/AddToFavoritesBtn.vue';
+import ScoreChoose from '@/components/ScoreChoose.vue';
 
 
 const route = useRoute()
@@ -11,6 +13,8 @@ const animeData = ref(null)
 const loading = ref(false)
 const error = ref(null)
 const router = useRouter()
+
+const animeId = ref(route.params?.id);
 
 const airedFrom = computed(() => {
   if (!animeData.value?.aired?.from) return null
@@ -60,7 +64,7 @@ const recommendations = ref([])
 watch(animeData, async (newData) => {
   if (!newData) return
 
-  const genreId = newData.genres?.[0]?.mal_id
+  const genreId = newData.genres?.[1]?.mal_id
   if (!genreId) return
   console.log('Genre ID:', genreId);
   
@@ -96,10 +100,17 @@ const goToDetail = (animeId) => {
     <div class="detail-left">
       <div class="detail-image">
         <img :src="animeData?.images?.jpg?.large_image_url" :alt="animeData?.title" class="w-full h-full object-cover"/>
+        <div class="favorites-btn">
+            <AddToFavoritesBtn size="sm_detail" :productId="animeData?.mal_id" @click.stop />
+          </div>
       </div>
       <div class="detail-data-log">
         <h2>Data Log</h2>
+        <ScoreChoose :id="animeId" />
         <div class="data-log-grid">
+          <span class="datalog-key">Title</span>
+          <span class="datalog-value">{{ animeData.title_english ? animeData.title_english : animeData.title }}</span>
+
           <span class="datalog-key">Type</span>
           <span class="datalog-value">{{ animeData?.type }}</span>
 
@@ -109,11 +120,11 @@ const goToDetail = (animeId) => {
           <span class="datalog-key">Status</span>
           <span :class="animeData?.status === 'Finished Airing' || 'Currently Airing' ? 'text-text-brand' : 'text-white'" class="datalog-value">{{ animeData?.status }}</span>
 
-            <span class="datalog-key">Aired</span>
-            <span class="datalog-value">{{ airedFrom }}</span>
+          <span class="datalog-key">Aired</span>
+          <span class="datalog-value">{{ airedFrom }}</span>
 
-            <span class="datalog-key">Studio</span>
-            <span class="datalog-value">{{ animeData?.studios?.[0]?.name }}</span>
+          <span class="datalog-key">Studio</span>
+          <span class="datalog-value">{{ animeData?.studios?.[0]?.name }}</span>
         </div>
       </div>
     </div>
@@ -158,7 +169,8 @@ const goToDetail = (animeId) => {
 .detail-image {
   @apply border border-border-default
     rounded-lg overflow-hidden
-    w-full;
+    w-full
+    relative;
 }
 
 h2 {
@@ -245,16 +257,21 @@ h2 {
     text-text-muted;
 }
 
+.favorites-btn {
+  @apply
+    mt-5
+}
+
 .recommendations-cards :deep(.container) {
   @apply
-    max-h-[400px] w-full
+    max-h-100 w-full
     hover:scale-105
     mt-10;
 }
 
 .recommendations-cards {
-   @apply grid grid-cols-1
-   sm:grid-cols-2
+   @apply grid grid-cols-1 justify-items-center
+   sm:grid-cols-2 sm:justify-items-start
    lg:grid-cols-3
    gap-4
    cursor-pointer;

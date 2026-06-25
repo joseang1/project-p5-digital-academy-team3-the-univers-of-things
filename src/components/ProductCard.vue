@@ -1,26 +1,53 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { Star } from 'lucide-vue-next';
 import AddToFavoritesBtn from './AddToFavoritesBtn.vue';
 import ChangeFeaturedBtn from './ChangeFeaturedBtn.vue';
 import { useAuthStore } from '@/stores/auth-store.js';
+import { useScoreStore } from '@/stores/score-store.js';
 import { storeToRefs } from 'pinia';
 
 const props = defineProps([
     "id", "imgUrl", "title",
-    "description", "score",
+    "description", "score", "scoredBy",
     "category", "genres",
     "episodes"
 ])
 
 const isAdmin = ref(false);
 
-onMounted(() => {
+const genresEdited = computed(() => {
+    let result = new Set(props.genres);
+    
+    const toRemove = new Set([
+        "Gourmet", "Award Winning",
+        "Ecchi", "Boys Love", 
+        "Avant Garde"
+    ])
+
+    result = new Set(
+        [...result].filter((item) => !toRemove.has(item))
+    )
+
+    return [...result];
+})
+
+const combinedScore = ref(null);
+const { calculateScore } = useScoreStore();
+
+
+onMounted(async () => {
     const authStore = useAuthStore();
     const {userType} = storeToRefs(authStore);
     if (userType.value == "admin") {
         isAdmin.value = true;
     }
+
+    combinedScore.value = await calculateScore(
+        props.id,
+        props.score,
+        props.scoredBy
+    )
 });
 
 </script>
@@ -31,7 +58,7 @@ onMounted(() => {
         <div class="image_container">
             <img class="image" :src="imgUrl" :alt="title"/>
             <div class="score">
-                <Star :size="12" fill="currentColor" :strokeWidth="2" /> {{ score }}
+                <Star :size="12" fill="currentColor" :strokeWidth="2" /> {{ combinedScore }}
             </div>
 
             <template v-if="isAdmin">
@@ -50,7 +77,7 @@ onMounted(() => {
             <!-- <p class="description">{{ description }}</p> -->
 
             <div class="genres_container">
-                <template v-for="(genre, key) in genres" :key="key">
+                <template v-for="(genre, key) in genresEdited" :key="key">
                     <div class="genre">{{ genre }}</div>
                 </template>
             </div>
@@ -117,7 +144,7 @@ onMounted(() => {
 
 .title {
     @apply 
-        text-left w-full text-lg
+        text-left w-full text-lg line-clamp-2
     ;
 }
 

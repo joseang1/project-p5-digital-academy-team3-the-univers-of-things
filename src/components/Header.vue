@@ -56,13 +56,13 @@ async function handleLogout() {
 
       <!-- Registrado -->
       <div v-else class="header-actions">
-        <button class="header-btn-avatar">
+        <RouterLink to="/settings" class="header-btn-avatar">
           <img
             src="https://api.dicebear.com/7.x/avataaars/svg?seed=nexus"
             alt="Avatar"
             class="header-avatar-img"
           />
-        </button>
+        </RouterLink>
         <button class="header-btn-logout" @click="handleLogout" title="Cerrar sesión">
           <svg
             width="18"
@@ -93,9 +93,11 @@ async function handleLogout() {
 
 .header-inner {
   @apply max-w-7xl mx-auto px-6 h-[60px] grid grid-cols-3 items-center;
+  @apply max-w-7xl mx-auto px-6 h-[60px] grid grid-cols-3 items-center;
 }
 
 .header-logo {
+  @apply flex items-baseline gap-2 no-underline justify-self-start;
   @apply flex items-baseline gap-2 no-underline justify-self-start;
 }
 
@@ -110,6 +112,7 @@ async function handleLogout() {
 
 .header-nav {
   @apply flex items-center gap-3 justify-self-center;
+  @apply flex items-center gap-3 justify-self-center;
 }
 
 .header-nav-divider {
@@ -117,6 +120,7 @@ async function handleLogout() {
 }
 
 .header-actions {
+  @apply flex items-center gap-2 justify-self-end;
   @apply flex items-center gap-2 justify-self-end;
 }
 
@@ -130,6 +134,10 @@ async function handleLogout() {
 
 .header-btn-nav {
   @apply px-2 py-1.5 rounded-lg text-sm text-text-muted hover:text-text-default hover:bg-bg-container transition-colors no-underline;
+}
+
+.header-btn-home {
+  @apply flex items-center justify-center w-9 h-9 rounded-lg text-text-muted hover:text-text-brand hover:bg-bg-container transition-colors;
 }
 
 .header-btn-home {

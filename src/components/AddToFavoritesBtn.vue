@@ -22,6 +22,8 @@
         }
     })
 
+    const showMessage = ref(false);
+
     const active = computed( () => {
         return checkFav(props.productId);
     })
@@ -31,14 +33,7 @@
         const userType = authStore.userType;
         
         if (!userType) {
-            
-            
-            
-            // Mostrar mensaje
-            console.log("MOSTRAMOS MENSAJE QUE NECESITAN LOGIN");
-            
-
-
+            showMessage.value = true;
         } else if (userType === "customer") {
             if (active.value) {
                 await removeFavorite(props.productId);
@@ -48,6 +43,10 @@
         }
     }
 
+    const popupClose = async () => {
+        showMessage.value = false;
+    }
+
     onMounted(async () => {
         await favoritesStore.initFavorites(authStore.user?.uid);
     });
@@ -55,7 +54,33 @@
 </script>
 
 <template>
-    <template v-if="size && size == 'sm'">
+    <div>
+        <div 
+        class="popup_message"
+        :class="
+            showMessage ? 'active' : '', 
+            !size ? 'popup_for_lg' : '',
+            size == 'sm_detail' ? 'popup_for_detail' : ''
+        "    
+        @click="popupClose" 
+        @click.stop
+    >
+        <span>
+            <span>  
+                You need an account for <br/>
+                adding to favorites.
+            </span> <br/>
+            Go to 
+            <RouterLink 
+                class="popup_link" 
+                to="/login"
+                @click.stop
+            >
+                login page
+            </RouterLink>
+        </span>
+    </div>
+    <template v-if="size && (size == 'sm' || size == 'sm_detail')">
         <div 
             @click.stop="buttonListener"
             class="favorite-button-sm"
@@ -81,7 +106,7 @@
             
         </div>
     </template>
-    
+    </div>
 </template>
 
 <style scoped>
@@ -91,7 +116,7 @@
     font-family: 'Hanken Grotesk';
     @apply
         flex gap-3 cursor-pointer
-        mr-60 py-3 px-4 rounded-sm
+        py-3 px-4 rounded-sm
         bg-bg-input border border-border-default
         hover:bg-bg-brand-darker
 
@@ -113,5 +138,39 @@
     ;
 }
 
+.popup_message {
+    @apply 
+        hidden absolute -top-18 left-4 
+        justify-center items-center p-2
+        bg-bg-input rounded-lg shadow-lg
+        border border-border-strong
+        text-center text-sm
+    ;
+}
+
+.popup_message.active {
+    @apply 
+        flex
+    ;
+}
+
+.popup_link {
+    @apply
+        text-text-brand hover:text-text-special
+        underline
+    ;
+}
+
+.popup_for_lg {
+    @apply 
+        top-32 left-4
+    ;
+}
+
+.popup_for_detail {
+    @apply 
+        top-16 left-6
+    ;
+}
 
 </style>
