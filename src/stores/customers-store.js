@@ -8,8 +8,6 @@ export const useCustomersStore = defineStore("customers", () => {
     const customers = ref([])
 
     async function updateCustomersList() {
-        console.log("updateCustomersList()");
-        
         const querySnapshot = await getDocs(collection(db, "users"))
 
         const customersList = querySnapshot.docs.filter(
@@ -36,16 +34,12 @@ export const useCustomersStore = defineStore("customers", () => {
     }
 
     async function addBlacklisted(uid) {
-        console.log("addBlacklisted()");
         await changeBlacklisted(uid, true)
     }
 
     async function removeBlacklisted(uid) {
-        console.log("removeBlacklisted()");
         await changeBlacklisted(uid, false)
     }
-
-
 
     return {
         customers, 
