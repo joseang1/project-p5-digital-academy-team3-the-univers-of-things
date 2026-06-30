@@ -1,8 +1,7 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import { db } from '@/firebase'
-import { collection, getDocs } from 'firebase/firestore'
-// import { doc, setDoc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore'
+import { collection, getDocs, updateDoc, doc } from 'firebase/firestore'
 
 
 export const useCustomersStore = defineStore("customers", () => {
@@ -11,15 +10,33 @@ export const useCustomersStore = defineStore("customers", () => {
     async function updateCustomersList() {
         console.log("updateCustomersList()");
         
+        const querySnapshot = await getDocs(collection(db, "users"))
+
+        customers.value = querySnapshot.docs.map(
+            doc => ({
+                uid: doc.id,
+                ...doc.data()
+            })
+        )
+    }
+
+    async function changeBlacklisted(uid, changeBoolean) {
+        const docRef = doc(db, "users", uid)
+        await updateDoc(docRef, {
+            blackListed: changeBoolean
+        })
+
+        await updateCustomersList();
     }
 
     async function addBlacklisted(uid) {
         console.log("addBlacklisted()");
-
+        await changeBlacklisted(uid, true)
     }
 
     async function removeBlacklisted(uid) {
         console.log("removeBlacklisted()");
+        await changeBlacklisted(uid, false)
     }
 
 

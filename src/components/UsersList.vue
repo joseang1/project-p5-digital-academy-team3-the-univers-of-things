@@ -1,95 +1,141 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import { useCustomersStore } from "@/stores/customers-store";
+import { storeToRefs } from "pinia";
 
+const customerStore = useCustomersStore();
+const {updateCustomersList, addBlacklisted, removeBlacklisted} = customerStore;
+const { customers } = storeToRefs(customerStore);
 
-const customers = ref([])
+onMounted(async () => {
+    await updateCustomersList();
+})
+
+const statusBtnHandler = async (index) => {
+    
+    const item = customers.value[index];
+    
+    if (item.blackListed) {
+        await removeBlacklisted(item.uid)
+    } else if (!item.blackListed) {
+        await addBlacklisted(item.uid)
+    }
+}
+
 </script>
 
-<!-- 
-num incr | email | fullname | create date | status btn[ active , blocked ] | uid
-
-
--->
 <template>
     <h1>USERs LIsT</h1>
 
-    <table>
-        <thead>
-            <tr>
-                <th class="n_column">№</th>
-                <th>Email</th>
-                <th>Full Name</th>
-                <th>Create Date</th>
-                <th>UID</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <template v-for="item, index in customers" :key="index">
+    <section>
+        <table>
+            <thead>
                 <tr>
-                    <td>{{ index }}</td>
-                    <td>{{ item.email }}</td>
-                    <td>{{ item.fullName }}</td>
-                    <td>{{ item.registerDate }}</td>
-                    <td>{{ item.uid }}</td>
-                    <td>
-                        <button 
-                            class="status_button"
-                            :class="item.status == 'active' ? 'status_active' : 'status_blocked'"
-                            @click="statusBtnHandler"
-                        >
-                            {{ item.status }}
-                        </button>
-                    </td>
+                    <th class="n_column">№</th>
+                    <th>Email</th>
+                    <th>Full Name</th>
+                    <th>Create Date</th>
+                    <th>UID</th>
+                    <th>Status</th>
                 </tr>
-            </template>
-            
-
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <template v-for="item, index in customers" :key="index">
+                    <tr>
+                        <td class="n_column">{{ index }}</td>
+                        <td>{{ item.email }}</td>
+                        <td>{{ item.fullName }}</td>
+                        <td>{{ item.registerDate }}</td>
+                        <td>{{ item.uid }}</td>
+                        <td>
+                            <button 
+                                id="statusButton"
+                                :class="item.blackListed ? 'status_blocked' : 'status_active'"
+                                @click="statusBtnHandler(index)"
+                            >
+                                {{ item.blackListed ? 'Blocked' : 'Active' }}
+                            </button>
+                        </td>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+    </section>
 
 </template>
 
 <style scoped>
-@referense "../assets/main.css";
+@reference "../assets/main.css";
 
 
+section {
+    @apply 
+        p-4 min-h-screen
+    ;
+}
 table {
-
+    @apply 
+        w-full border border-border-default
+        text-left text-base
+    ;
 }
 
 thead {
-
+    @apply 
+        font-bold bg-bg-input
+    ;
 }
 
+/*
 tbody {
-
+    @apply 
+        
+    ;
 }
 
 tr {
-
+    @apply 
+        
+    ;
 }
+ */
+.n_column {
+    @apply  
+        w-5
+    ;
+} 
 
 th {
-    
+    @apply 
+        p-2 border border-border-strong
+    ;
 }
+
 
 td {
-
+    @apply 
+        p-2 border border-border-default
+    ;
 }
+/* 
 
 
-
-.status_button {
-
+#statusButton {
+    @apply 
+        
+    ;
 }
 
 .status_active{
-
+    @apply 
+        
+    ;
 }
 
 .status_blocked {
-
-}
+    @apply 
+        
+    ;
+} */
 
 </style>
