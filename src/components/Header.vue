@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import { useAuthStore } from '../stores/auth-store.js'
 import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
+import { LayoutDashboard } from 'lucide-vue-next'
 
 const auth = useAuthStore()
 const { userType, avatarURL, username } = storeToRefs(auth)
@@ -39,18 +40,13 @@ async function handleLogout() {
   <header class="header">
     <div class="header-inner">
       <!-- Logo -->
-      <RouterLink to="/" class="header-logo">
+      <a href="/" class="header-logo">
         <span class="header-logo-title">Nexus Anime</span>
         <span class="header-logo-sub">Anime</span>
-      </RouterLink>
+      </a>
 
-      <!-- Navegación escritorio -->
+      <!-- Navegación escritorio: Home primero, Dashboard a su derecha -->
       <nav class="header-nav">
-        <RouterLink v-if="auth.isLoggedIn" :to="dashboardLink" class="header-btn-nav"
-          >Dashboard</RouterLink
-        >
-        <span v-if="auth.isLoggedIn" class="header-nav-divider"></span>
-
         <RouterLink to="/" class="header-btn-home" title="Inicio">
           <svg
             width="18"
@@ -68,9 +64,14 @@ async function handleLogout() {
         </RouterLink>
 
         <span v-if="auth.isLoggedIn" class="header-nav-divider"></span>
-        <RouterLink v-if="auth.isLoggedIn" to="/favorites" class="header-btn-nav"
-          >Favorite List</RouterLink
+        <RouterLink
+          v-if="auth.isLoggedIn"
+          :to="dashboardLink"
+          class="header-btn-home"
+          title="Dashboard"
         >
+          <LayoutDashboard :size="18" />
+        </RouterLink>
       </nav>
 
       <!-- Botón hamburguesa (solo móvil, ocupa el hueco de la navegación central) -->
@@ -113,7 +114,7 @@ async function handleLogout() {
 
       <!-- Sin registrar -->
       <div v-if="!auth.isLoggedIn" class="header-actions">
-        <RouterLink to="/login" class="header-btn-login">Login</RouterLink>
+        <RouterLink to="/Login" class="header-btn-login">Login</RouterLink>
         <RouterLink to="/register" class="header-btn-register">Register</RouterLink>
       </div>
 
@@ -146,7 +147,7 @@ async function handleLogout() {
       </div>
     </div>
 
-    <!-- Menú móvil desplegable -->
+    <!-- Menú móvil desplegable: Home y Dashboard con texto -->
     <Transition name="mobile-menu">
       <nav v-if="mobileMenuOpen" class="mobile-nav">
         <RouterLink to="/" class="mobile-nav-link" @click="closeMobileMenu">Home</RouterLink>
@@ -155,15 +156,9 @@ async function handleLogout() {
           :to="dashboardLink"
           class="mobile-nav-link"
           @click="closeMobileMenu"
-          >Dashboard</RouterLink
         >
-        <RouterLink
-          v-if="auth.isLoggedIn"
-          to="/favorites"
-          class="mobile-nav-link"
-          @click="closeMobileMenu"
-          >Favorite List</RouterLink
-        >
+          Dashboard
+        </RouterLink>
       </nav>
     </Transition>
   </header>
@@ -216,7 +211,7 @@ async function handleLogout() {
 }
 
 .header-btn-nav {
-  @apply px-2 py-1.5 rounded-lg text-sm text-text-muted hover:text-text-default hover:bg-bg-container transition-colors no-underline;
+  @apply flex items-center gap-1.5 px-2 py-1.5 rounded-lg text-sm text-text-muted hover:text-text-default hover:bg-bg-container transition-colors no-underline;
 }
 
 .header-btn-home {
@@ -250,7 +245,7 @@ async function handleLogout() {
 }
 
 .mobile-nav-link {
-  @apply flex items-center justify-center text-center px-4 py-3 rounded-xl text-base font-semibold text-text-default bg-bg-container border border-border-default hover:border-border-brand hover:text-text-brand transition-colors no-underline;
+  @apply flex items-center justify-center gap-2 text-center px-4 py-3 rounded-xl text-base font-semibold text-text-default bg-bg-container border border-border-default hover:border-border-brand hover:text-text-brand transition-colors no-underline;
 }
 
 .mobile-menu-enter-active,
