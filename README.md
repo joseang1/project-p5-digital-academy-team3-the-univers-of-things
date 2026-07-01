@@ -190,7 +190,41 @@ npm run test:e2e -- --debug
 
 
 ## UserFlow
-(USER FLOW)
+
+<img 
+    width="1290" height="1225" 
+    alt="Nexus Anime - Homepage" 
+    src="./docs/userflow/UserFlow-Guest.png" 
+    style="
+        border: 1px solid #ccc; 
+        border-radius: 15px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+    "
+/>
+
+<img 
+    width="1290" height="836" 
+    alt="Nexus Anime - Homepage" 
+    src="./docs/userflow/UserFlow-Customer.png" 
+    style="
+        border: 1px solid #ccc; 
+        border-radius: 15px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+    "
+/>
+
+<img 
+    width="1290" height="895" 
+    alt="Nexus Anime - Homepage" 
+    src="./docs/userflow/UserFlow-Admin.png" 
+    style="
+        border: 1px solid #ccc; 
+        border-radius: 15px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+    "
+/>
+
+
 
 ## Planning (Jira)
 
