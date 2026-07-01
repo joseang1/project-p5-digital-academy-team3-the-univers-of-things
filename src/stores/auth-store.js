@@ -52,7 +52,9 @@ export const useAuthStore = defineStore('auth', () => {
     const docSnap = await getDoc(doc(db, 'users', credential.user.uid))
     const userData = docSnap.data()
     user.value = {
-      ...credential.user,
+      // ...credential.user,
+      uid: credential.user.uid,
+      email: credential.user.email,
       fullName: userData.fullName,
       type: userData.type,
       avatar: userData.avatar,
@@ -116,8 +118,10 @@ export const useAuthStore = defineStore('auth', () => {
         const userData = docSnap.data()
 
         user.value = {
-          ...firebaseUser,
+          // ...firebaseUser,
+          uid: firebaseUser.uid,
           ...userData,
+          registerDate: userData.registerDate?.toDate()
         }
       } else {
         user.value = null;
